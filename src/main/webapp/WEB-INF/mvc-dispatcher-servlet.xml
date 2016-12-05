@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- thenaming of the file is based on web.xml dispatcher servlet name set. 
+	Spring will look for such name dispatcher servlet name + '-servlet.xml' -->
+
+<!-- http://docs.spring.io/spring/docs/4.2.8.RELEASE/spring-framework-reference/htmlsingle/
+search for 'mvc:annotation-driven' how beans schema is defined inspring config -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+ 
+	<mvc:annotation-driven/>
+ 	
+	
+    <context:component-scan base-package="seb"/>
+
+	<!-- maps request URLs to Controller names -->
+
+    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+
+
+</beans>
