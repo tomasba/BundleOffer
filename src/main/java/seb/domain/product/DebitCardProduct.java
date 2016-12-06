@@ -1,49 +1,57 @@
 package seb.domain.product;
 
-import java.util.Map;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Required;
+import seb.api.base.Displayable;
 
-import seb.api.Displayable;
-import seb.api.dto.QuestionDto;
-import seb.api.product.AccountProductApplicable;
-import seb.api.product.CardProductApplicable;
-import seb.api.product.ProductResolver;
+public class DebitCardProduct implements ProductCohesionApplicable, ProductRuleApplicable, CardProductApplicable, Displayable {	
 
-public class DebitCardProduct implements CardProductApplicable, Displayable {
+	private List<String> applicableProducts;
 	
-	private ProductResolver<AccountProductApplicable> productsResolver;
-
-	@Override
-	public boolean realize(final QuestionDto question) {
-		if (!isProductApplicabilitySatisfied(question)) {
-			return false;
-		}
-		return true;
+	public DebitCardProduct(List<String> products) {
+		this.applicableProducts = products;
 	}
 	
-	protected boolean isProductApplicabilitySatisfied(final QuestionDto question) {
-		Map<String, AccountProductApplicable> accountProducts = productsResolver.resolve();
-		for (AccountProductApplicable product : accountProducts.values()) {		
-			if (product.realize(question)) {
-				return true;
-			}
-		}
-		return false;
-	}	
+//	@Override
+//	public boolean realize(final Question question) {
+//		if (!isProductApplicabilitySatisfied(question)) {
+//			return false;
+//		}
+//		return true;
+//	}
+//	
+//	protected boolean isProductApplicabilitySatisfied(final Question question) {
+//		Map<String, AccountProductApplicable> accountProducts = productsResolver.resolve();
+//		for (AccountProductApplicable product : accountProducts.values()) {		
+//			if (product.realize(question)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}	
 	
 	@Override
 	public String getDisplayValue() {
 		return "Debit Card";
 	}
 
-	public ProductResolver<AccountProductApplicable> getProductsResolver() {
-		return productsResolver;
+	public List<String> getProducts() {
+		return applicableProducts;
 	}
 
-	@Required
-	public void setProductsResolver(ProductResolver<AccountProductApplicable> productsResolver) {
-		this.productsResolver = productsResolver;
+	public void setProducts(List<String> products) {
+		this.applicableProducts = products;
+	}
+
+	@Override
+	public List<String> resolveApplicableProducts() {
+		return applicableProducts;
+	}
+
+	@Override
+	public List<String> resolveApplicableRules() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

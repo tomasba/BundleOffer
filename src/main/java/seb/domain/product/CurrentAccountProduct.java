@@ -2,10 +2,9 @@ package seb.domain.product;
 
 import java.util.List;
 
-import seb.api.Displayable;
-import seb.api.product.AccountProductApplicable;
+import seb.api.base.Displayable;
 
-public class CurrentAccountProduct extends BaseProductImpl implements AccountProductApplicable, Displayable {
+public class CurrentAccountProduct implements ProductRuleApplicable, AccountProductApplicable, Displayable {
 
 	private List<String> ruleBeanNames;
 	

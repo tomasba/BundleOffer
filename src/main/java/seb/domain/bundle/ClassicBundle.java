@@ -2,16 +2,20 @@ package seb.domain.bundle;
 
 import java.util.List;
 
-import seb.api.Displayable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ClassicBundle extends BaseBundleImpl implements Displayable {
+import seb.api.base.Displayable;
+
+public class ClassicBundle implements BundleApplicable, Displayable {
 
 	private List<String> products;
-	private List<String> rules;		
+	private List<String> rules;
+	private boolean containsAccountProduct;
 	
-	public ClassicBundle(List<String> rules, List<String> products) {
+	public ClassicBundle(List<String> rules, List<String> products, boolean containsAccountProduct) {
 		this.products = products;
 		this.rules = rules;
+		this.containsAccountProduct = containsAccountProduct;
 	}
 
 	@Override
@@ -29,8 +33,20 @@ public class ClassicBundle extends BaseBundleImpl implements Displayable {
 		return "Classic";
 	}
 
+	@JsonProperty("Priority")
 	@Override
 	public int resolvePriority() {
 		return 1;
 	}
+
+	@Override
+	public int compareTo(BundleComparable bundle) {
+		return bundle.resolvePriority() - this.resolvePriority();
+	}
+
+	@Override
+	public boolean isContainingAccountProduct() {
+		return containsAccountProduct;
+	}		
+	
 }

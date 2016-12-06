@@ -2,16 +2,20 @@ package seb.domain.bundle;
 
 import java.util.List;
 
-import seb.api.Displayable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JuniorSaverBundle extends BaseBundleImpl implements Displayable {
+import seb.api.base.Displayable;
+
+public class JuniorSaverBundle implements BundleApplicable, Displayable {
 
 	private List<String> products;
 	private List<String> rules;
+	private boolean containsAccountProduct;
 	
-	public JuniorSaverBundle(List<String> rules, List<String> products) {
+	public JuniorSaverBundle(List<String> rules, List<String> products, boolean containsAccountProduct) {
 		this.products = products;
 		this.rules = rules;
+		this.containsAccountProduct = containsAccountProduct;
 	}
 
 	@Override
@@ -24,6 +28,7 @@ public class JuniorSaverBundle extends BaseBundleImpl implements Displayable {
 		return rules;
 	}	
 	
+	@JsonProperty("Priority")
 	@Override
 	public int resolvePriority() {
 		return 0;
@@ -34,4 +39,13 @@ public class JuniorSaverBundle extends BaseBundleImpl implements Displayable {
 		return "Junior Saver";
 	}
 
+	@Override
+	public int compareTo(BundleComparable bundle) {
+		return bundle.resolvePriority() - this.resolvePriority();
+	}
+
+	@Override
+	public boolean isContainingAccountProduct() {
+		return containsAccountProduct;
+	}		
 }

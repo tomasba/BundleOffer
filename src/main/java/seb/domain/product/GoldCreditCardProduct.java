@@ -2,10 +2,9 @@ package seb.domain.product;
 
 import java.util.List;
 
-import seb.api.Displayable;
-import seb.api.product.CardProductApplicable;
+import seb.api.base.Displayable;
 
-public class GoldCreditCardProduct extends BaseProductImpl implements CardProductApplicable, Displayable {
+public class GoldCreditCardProduct implements ProductRuleApplicable, CardProductApplicable, Displayable {
 
 	private List<String> rules;
 	

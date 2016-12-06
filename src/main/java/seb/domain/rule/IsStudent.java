@@ -1,22 +1,25 @@
 package seb.domain.rule;
 
-import seb.api.dto.QuestionDto;
-import seb.api.rule.RuleApplicable;
+import seb.api.customer.dto.Question;
 
 public class IsStudent implements RuleApplicable {
 
-	private QuestionDto question;
+	private Question question;
 	
 	public IsStudent() {		
 	}
 	
-	public IsStudent(QuestionDto question) {
+	public IsStudent(Question question) {
 		this.question = question;
 	}	
 	
 	@Override
 	public boolean realize() {
-		return (question != null && question.isStudentAttrProvided() && question.isStudent());
+		return (question != null && question.isStudent());
 	}
 
+	@Override
+	public String toString() {
+		return "IsStudent";
+	}		
 }

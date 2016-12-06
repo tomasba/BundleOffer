@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="juniorSaverBundle" class="seb.domain.bundle.JuniorSaverBundle">
+		<constructor-arg name="rules">
+		   	<list>
+            	<value>ageLessThen18</value>            	
+        	</list>
+	    </constructor-arg>
+		<constructor-arg name="products">
+		   	<list>
+            	<value>juniorSaverAccountProduct</value>
+        	</list>
+	    </constructor-arg>
+	    <constructor-arg name="containsAccountProduct" value="true"/>	    
+    </bean>
+    
+	<bean id="studentBundle" class="seb.domain.bundle.StudentBundle">
+		<constructor-arg name="rules">
+		   	<list>
+            	<value>ageMoreThen17</value>            	
+            	<value>isStudent</value>
+        	</list>
+	    </constructor-arg>
+		<constructor-arg name="products">
+		   	<list>
+            	<value>studentAccountProduct</value>
+            	<value>debitCardProduct</value>
+            	<value>creditCardProduct</value>
+        	</list>
+	    </constructor-arg>
+	    <constructor-arg name="containsAccountProduct" value="true"/>
+    </bean>    
+
+	<bean id="goldBundle" class="seb.domain.bundle.GoldBundle">
+		<constructor-arg name="rules">
+		   	<list>
+            	<value>ageMoreThen17</value>            	
+            	<value>incomeMoreThen40000</value>
+        	</list>
+	    </constructor-arg>
+		<constructor-arg name="products">
+		   	<list>
+            	<value>currentAccountPlusProduct</value>
+            	<value>debitCardProduct</value>
+            	<value>goldCreditCardProduct</value>
+        	</list>
+	    </constructor-arg>
+	    <constructor-arg name="containsAccountProduct" value="true"/>
+    </bean>
+    
+	<bean id="classicPlusBundle" class="seb.domain.bundle.ClassicPlusBundle">
+		<constructor-arg name="rules">
+		   	<list>
+            	<value>ageMoreThen17</value>            	
+            	<value>incomeMoreThen12000</value>
+        	</list>
+	    </constructor-arg>
+		<constructor-arg name="products">
+		   	<list>
+            	<value>currentAccountProduct</value>
+            	<value>debitCardProduct</value>
+            	<value>creditCardProduct</value>
+        	</list>
+	    </constructor-arg>
+	    <constructor-arg name="containsAccountProduct" value="true"/>
+    </bean>
+    
+	<bean id="classicBundle" class="seb.domain.bundle.ClassicBundle">
+		<constructor-arg name="rules">
+		   	<list>
+            	<value>ageMoreThen17</value>
+            	<value>incomeMoreThen0</value>
+        	</list>
+	    </constructor-arg>
+		<constructor-arg name="products">
+		   	<list>
+            	<value>currentAccountProduct</value>
+            	<value>debitCardProduct</value>
+        	</list>
+	    </constructor-arg>
+	    <constructor-arg name="containsAccountProduct" value="true"/>
+    </bean>
+       
+</beans>

@@ -2,10 +2,9 @@ package seb.domain.product;
 
 import java.util.List;
 
-import seb.api.Displayable;
-import seb.api.product.CardProductApplicable;
+import seb.api.base.Displayable;
 
-public class CreditCardProduct extends BaseProductImpl implements CardProductApplicable, Displayable {
+public class CreditCardProduct implements ProductRuleApplicable, CardProductApplicable, Displayable {
 
 	private List<String> ruleBeanNames;
 	

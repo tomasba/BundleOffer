@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="creditCardProduct" class="seb.domain.product.CreditCardProduct">		
+		<constructor-arg>
+		   	<list>
+            	<value>incomeMoreThen12000</value>
+            	<value>ageMoreThen17</value>
+        	</list>
+	    </constructor-arg>	    
+    </bean>
+    
+	<bean id="currentAccountProduct" class="seb.domain.product.CurrentAccountProduct">
+		<constructor-arg>
+		   	<list>
+            	<value>incomeMoreThen0</value>
+            	<value>ageMoreThen17</value>
+        	</list>
+	    </constructor-arg>
+    </bean>
+	
+	<bean id="currentAccountPlusProduct" class="seb.domain.product.CurrentAccountPlusProduct">
+		<constructor-arg>
+		   	<list>
+            	<value>incomeMoreThen40000</value>
+            	<value>ageMoreThen17</value>
+        	</list>
+	    </constructor-arg>
+    </bean>	
+	
+	<bean id="goldCreditCardProduct" class="seb.domain.product.GoldCreditCardProduct">
+		<constructor-arg>
+		   	<list>
+            	<value>incomeMoreThen40000</value>
+            	<value>ageMoreThen17</value>		   	
+        	</list>
+	    </constructor-arg>
+    </bean>		
+    
+	<bean id="juniorSaverAccountProduct" class="seb.domain.product.JuniorSaverAccountProduct">
+		<constructor-arg>
+		   	<list>
+            	<value>ageLessThen18</value>            	
+        	</list>
+	    </constructor-arg>
+    </bean>    
+    
+	<bean id="studentAccountProduct" class="seb.domain.product.StudentAccountProduct">
+		<constructor-arg>
+		   	<list>
+            	<value>isStudent</value>            	
+            	<value>ageMoreThen17</value>
+        	</list>
+	    </constructor-arg>
+    </bean>
+
+	<bean id="debitCardProduct" class="seb.domain.product.DebitCardProduct">
+		<constructor-arg name="products">
+		   	<list>
+            	<value>currentAccountProduct</value>            	
+            	<value>currentAccountProductPlusProduct</value>
+            	<value>studentAccountProduct</value>
+        	</list>
+	    </constructor-arg>	
+	</bean>    
+
+</beans>

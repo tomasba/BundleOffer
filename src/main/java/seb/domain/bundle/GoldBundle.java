@@ -2,16 +2,20 @@ package seb.domain.bundle;
 
 import java.util.List;
 
-import seb.api.Displayable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GoldBundle extends BaseBundleImpl implements Displayable {
+import seb.api.base.Displayable;
+
+public class GoldBundle implements BundleApplicable, Displayable {
 	
 	private List<String> products;
 	private List<String> rules;
+	private boolean containsAccountProduct;
 	
-	public GoldBundle(List<String> rules, List<String> products) {
+	public GoldBundle(List<String> rules, List<String> products, boolean containsAccountProduct) {
 		this.products = products;
 		this.rules = rules;
+		this.containsAccountProduct = containsAccountProduct;
 	}
 
 	@Override
@@ -29,9 +33,19 @@ public class GoldBundle extends BaseBundleImpl implements Displayable {
 		return "Gold";
 	}
 
+	@JsonProperty("Priority")
 	@Override
 	public int resolvePriority() {
 		return 3;
 	}
-	
+
+	@Override
+	public int compareTo(BundleComparable bundle) {
+		return bundle.resolvePriority() - this.resolvePriority();
+	}
+
+	@Override
+	public boolean isContainingAccountProduct() {
+		return containsAccountProduct;
+	}		
 }

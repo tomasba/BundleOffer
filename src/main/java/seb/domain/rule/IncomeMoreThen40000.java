@@ -1,22 +1,25 @@
 package seb.domain.rule;
 
-import seb.api.dto.QuestionDto;
-import seb.api.rule.RuleApplicable;
+import seb.api.customer.dto.Question;
 
 public class IncomeMoreThen40000 implements RuleApplicable {
 
-	private QuestionDto question;
+	private Question question;
 	
 	public IncomeMoreThen40000(){		
 	}
 	
-	public IncomeMoreThen40000(QuestionDto question) {
+	public IncomeMoreThen40000(Question question) {
 		this.question = question;
 	}
 	
 	@Override
 	public boolean realize() {
-		return (question != null && question.isIncomeAttrProvided() && question.getIncome() > 40000);
+		return (question != null && question.getIncome() > 40000);
 	}
 
+	@Override
+	public String toString() {
+		return "IncomeMoreThen40000";
+	}		
 }

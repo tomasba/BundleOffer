@@ -1,13 +1,12 @@
 package seb.domain.rule;
 
-import seb.api.dto.QuestionDto;
-import seb.api.rule.RuleApplicable;
+import seb.api.customer.dto.Question;
 
 public class IncomeMoreThen12000 implements RuleApplicable {
 
-	private QuestionDto question;	
+	private Question question;	
 	
-	public IncomeMoreThen12000(QuestionDto question) {
+	public IncomeMoreThen12000(Question question) {
 		this.question = question;
 	}
 	
@@ -16,7 +15,11 @@ public class IncomeMoreThen12000 implements RuleApplicable {
 	
 	@Override
 	public boolean realize() {
-		return (question != null && question.isIncomeAttrProvided() && question.getIncome() > 12000);
+		return (question != null && question.getIncome() > 12000);
 	}
 
+	@Override
+	public String toString() {
+		return "IncomeMoreThen12000";
+	}		
 }

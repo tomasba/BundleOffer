@@ -3,204 +3,86 @@
     xmlns:mvc="http://www.springframework.org/schema/mvc"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:c="http://www.springframework.org/schema/c"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/util
-		http://www.springframework.org/schema/util/spring-util-2.5.xsd"
-        >
-
- 	<!-- scan for available 'controllers' - repositories -->
-<!--     <context:component-scan base-package="seb"/> -->
-
-<!--  RULES  -->
-	<bean id="ageLessThen18" class="seb.domain.rule.AgeLessThen18" scope="prototype"/>
-	<bean id="ageMoreThen17" class="seb.domain.rule.AgeMoreThen17" scope="prototype"/>
-	<bean id="incomeMoreThen0" class="seb.domain.rule.IncomeMoreThen0" scope="prototype"/>
-	<bean id="incomeMoreThen12000" class="seb.domain.rule.IncomeMoreThen12000" scope="prototype" />
-	<bean id="incomeMoreThen40000" class="seb.domain.rule.IncomeMoreThen40000" scope="prototype"/>
-	<bean id="isStudent" class="seb.domain.rule.IsStudent" scope="prototype"/>
+        http://www.springframework.org/schema/context/spring-context.xsd">
 	
-	<bean id="rulesResolver" class="seb.service.resolver.rule.RulesResolverImpl"/>
+	<!-- product validators -->	
+		
+	<bean id="productValidationService" class="seb.service.product.validation.ProductValidationServiceImpl">
+		<property name="productCohesionValidator" ref="productCohesionValidator"/>
+		<property name="productRuleValidator" ref="productRuleValidator"/>		
+		<property name="productsResolver" ref="productsResolver"/>
+	</bean>			
 	
-<!--  PRODUCTS  -->
-
-	<bean id="productsResolver" class="seb.service.resolver.product.ProductsResolverImpl"/>
-	<bean id="cardProductsResolver" class="seb.service.resolver.product.CardProductsResolverImpl"/>
-	<bean id="accountProductsResolver" class="seb.service.resolver.product.AccountProductsResolverImpl"/>
-	
-	<bean id="baseProduct" class="seb.domain.product.BaseProductImpl" abstract="true">
+	<bean id="productCohesionValidator" class="seb.service.validator.product.ProductCohesionValidatorImpl">
 		<property name="rulesResolver" ref="rulesResolver"/>
+		<property name="productsResolver" ref="productsResolver"/>		
+		<property name="productRuleValidator" ref="productRuleValidator"/>
+	</bean>
+	
+	<bean id="productRuleValidator" class="seb.service.validator.product.ProductRuleValidatorImpl">
+		<property name="rulesResolver" ref="rulesResolver"/>
+		<property name="productsResolver" ref="productsResolver"/>		
 	</bean>
 		
+<!-- 	<bean id="accountProductCohesionValidator" class="seb.service.rule.validator.product.ProductCohesionValidatorImpl"> -->
+<!-- 		<property name="rulesResolver" ref="rulesResolver"/> -->
+<!-- 		<property name="productsResolver" ref="accountProductsResolver"/>		 -->
+<!-- 		<property name="productRuleValidator" ref="accountProductRuleValidator"/> -->
+<!-- 	</bean> -->
+	
+<!-- 	<bean id="cardProductCohesionValidator" class="seb.service.rule.validator.product.ProductCohesionValidatorImpl"> -->
+<!-- 		<property name="rulesResolver" ref="rulesResolver"/> -->
+<!-- 		<property name="productsResolver" ref="cardProductsResolver"/>		 -->
+<!-- 		<property name="productRuleValidator" ref="cardProductRuleValidator"/> -->
+<!-- 	</bean>	 -->
+	
+<!-- 	<bean id="accountProductRuleValidator" class="seb.service.rule.validator.product.ProductRuleValidatorImpl"> -->
+<!-- 		<property name="rulesResolver" ref="rulesResolver"/> -->
+<!-- 		<property name="productsResolver" ref="accountProductsResolver"/>		 -->
+<!-- 	</bean> -->
 
-	<bean id="creditCardProduct" class="seb.domain.product.CreditCardProduct" parent="baseProduct">		
-		<constructor-arg>
-		   	<list>
-            	<value>incomeMoreThen12000</value>
-            	<value>ageMoreThen17</value>
-        	</list>
-	    </constructor-arg>	    
+<!-- 	<bean id="cardProductRuleValidator" class="seb.service.rule.validator.product.ProductRuleValidatorImpl"> -->
+<!-- 		<property name="rulesResolver" ref="rulesResolver"/> -->
+<!-- 		<property name="productsResolver" ref="cardProductsResolver"/>		 -->
+<!-- 	</bean> -->
+
+ 
+    
+    <!-- bundle validation -->     
+    
+    <bean id="bundleValidationService" class="seb.service.bundle.validation.BundleValidationServiceImpl">
+    	<property name="bundleResolver" ref="bundleResolver"/>
+    	<property name="bundleRuleValidator" ref="bundleRuleValidator"/>         
+    </bean>    
+             
+	<bean id="bundleRuleValidator" class="seb.service.validator.bundle.BundleRuleValidatorImpl">
+    	<property name="bundleResolver" ref="bundleResolver"/>    
+    	<property name="rulesResolver" ref="rulesResolver"/>
     </bean>
     
-	<bean id="currentAccountProduct" class="seb.domain.product.CurrentAccountProduct" parent="baseProduct">
-		<constructor-arg>
-		   	<list>
-            	<value>incomeMoreThen0</value>
-            	<value>ageMoreThen17</value>
-        	</list>
-	    </constructor-arg>
-    </bean>
-	
-	<bean id="currentAccountPlusProduct" class="seb.domain.product.CurrentAccountPlusProduct" parent="baseProduct">
-		<constructor-arg>
-		   	<list>
-            	<value>incomeMoreThen40000</value>
-            	<value>ageMoreThen17</value>
-        	</list>
-	    </constructor-arg>
-    </bean>	
-	
-	<bean id="goldCreditCardProduct" class="seb.domain.product.GoldCreditCardProduct" parent="baseProduct">
-		<constructor-arg>
-		   	<list>
-            	<value>incomeMoreThen40000</value>
-            	<value>ageMoreThen17</value>		   	
-        	</list>
-	    </constructor-arg>
-    </bean>		
-    
-	<bean id="juniorSaverAccountProduct" class="seb.domain.product.JuniorSaverAccountProduct" parent="baseProduct">
-		<constructor-arg>
-		   	<list>
-            	<value>ageLessThen18</value>            	
-        	</list>
-	    </constructor-arg>
+	<bean id="bundleProductValidator" class="seb.service.validator.bundle.BundleProductValidatorImpl">
+    	<property name="bundleResolver" ref="bundleResolver"/>    
+    	<property name="productResolver" ref="productsResolver"/>
+    	<property name="productRuleValidator" ref="productRuleValidator"/>
+    	<property name="productCohesionValidator" ref="productCohesionValidator"/>    	
     </bean>    
     
-	<bean id="studentAccountProduct" class="seb.domain.product.StudentAccountProduct" parent="baseProduct">
-		<constructor-arg>
-		   	<list>
-            	<value>isStudent</value>            	
-            	<value>ageMoreThen17</value>
-        	</list>
-	    </constructor-arg>
-    </bean>
-
-	<bean id="debitCardProduct" class="seb.domain.product.DebitCardProduct">
-		<property name="productsResolver" ref="accountProductsResolver"/>	
-	</bean>    
     
-<!--  BUNDLES  -->    
-    
-    
-    <bean id="bundleResolver" class="seb.service.resolver.bundle.BundleResolverImpl"/>
-    
-	<bean id="baseBundle" class="seb.domain.bundle.BaseBundleImpl" abstract="true">
-		<property name="rulesResolver" ref="rulesResolver"/>
-		<property name="productsResolver" ref="productsResolver"/>
-	</bean>    
-    
-	<bean id="juniorSaver" class="seb.domain.bundle.JuniorSaverBundle" parent="baseBundle">
-		<constructor-arg name="rules">
-		   	<list>
-            	<value>ageLessThen18</value>            	
-        	</list>
-	    </constructor-arg>
-		<constructor-arg name="products">
-		   	<list>
-            	<value>juniorSaverAccountProduct</value>
-        	</list>
-	    </constructor-arg>
-    </bean>
-    
-	<bean id="studentBundle" class="seb.domain.bundle.StudentBundle" parent="baseBundle">
-		<constructor-arg name="rules">
-		   	<list>
-            	<value>ageMoreThen17</value>            	
-            	<value>isStudent</value>
-        	</list>
-	    </constructor-arg>
-		<constructor-arg name="products">
-		   	<list>
-            	<value>studentAccountProduct</value>
-            	<value>debitCardProduct</value>
-            	<value>creditCardProduct</value>
-        	</list>
-	    </constructor-arg>
-    </bean>    
-
-	<bean id="goldBundle" class="seb.domain.bundle.GoldBundle" parent="baseBundle">
-		<constructor-arg name="rules">
-		   	<list>
-            	<value>ageMoreThen17</value>            	
-            	<value>incomeMoreThen40000</value>
-        	</list>
-	    </constructor-arg>
-		<constructor-arg name="products">
-		   	<list>
-            	<value>currentAccountPlusProduct</value>
-            	<value>debitCardProduct</value>
-            	<value>goldCreditCardProduct</value>
-        	</list>
-	    </constructor-arg>
-    </bean>
-    
-	<bean id="classicPlusBundle" class="seb.domain.bundle.ClassicPlusBundle" parent="baseBundle">
-		<constructor-arg name="rules">
-		   	<list>
-            	<value>ageMoreThen17</value>            	
-            	<value>incomeMoreThen12000</value>
-        	</list>
-	    </constructor-arg>
-		<constructor-arg name="products">
-		   	<list>
-            	<value>currentAccountProduct</value>
-            	<value>debitCardProduct</value>
-            	<value>creditCardProduct</value>
-        	</list>
-	    </constructor-arg>
-    </bean>
-    
-	<bean id="classicBundle" class="seb.domain.bundle.ClassicBundle" parent="baseBundle">
-		<constructor-arg name="rules">
-		   	<list>
-            	<value>ageMoreThen17</value>
-            	<value>incomeMoreThen0</value>
-        	</list>
-	    </constructor-arg>
-		<constructor-arg name="products">
-		   	<list>
-            	<value>currentAccountProduct</value>
-            	<value>debitCardProduct</value>
-        	</list>
-	    </constructor-arg>
-    </bean>
-    
-<!--  BUNDLE SERVICES  -->    
-    
-    <bean id="bundleRuleExecutor" class="seb.service.BundleRuleExecutorImpl">
+	<!--  bundle services  -->        
+    <bean id="bundleRuleExecutor" class="seb.service.bundle.CustomerBundleServiceImpl">
     	<property name="bundleRealizationService" ref="bundleRealizationService"/>    
     </bean>
     
-   	<bean id="bundleRealizationService" class="seb.service.BundleRealizationServiceImpl">
+   	<bean id="bundleRealizationService" class="seb.service.bundle.BundleApplicabilityServiceImpl">
     	<property name="bundleResolver" ref="bundleResolver"/>    
-    </bean>
-    
-<!-- VALIDATION -->
-    <bean id="bundleValidator" class="seb.service.BundleValidatorImpl">
-    	<property name="bundleResolver" ref="bundleResolver"/>
-		<property name="productsResolver" ref="productsResolver"/>
-    </bean>
-
+    	<property name="bundleRuleValidator" ref="bundleRuleValidator"/>
+    	<property name="bundleProductValidator" ref="bundleProductValidator"/>
+    </bean>    
     
 </beans>
