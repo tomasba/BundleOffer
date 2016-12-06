@@ -49,7 +49,7 @@ Expected result:
 ``` 
 
 ### Provide best match applicable bundles depending on customer answers to the questions provided
-POST http://localhost:8080/BundleProvider/bundle
+POST http://localhost:8080/BundleProvider/bundles
 
 #### Sample
 Body:
