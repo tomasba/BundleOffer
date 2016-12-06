@@ -19,13 +19,17 @@ POST http://localhost:8080/BundleProvider/bundle
 
 #### Sample
 Body:
+
+``` 
 {
 	"age" : "18", 
 	"student" : "true",
 	"income" : "12001"
 }
+``` 
 
 Expected result:
+``` 
 [
   {
     "containingAccountProduct": true,
@@ -42,19 +46,25 @@ Expected result:
     ]
   }
 ]
+``` 
 
 ### Provide best match applicable bundles depending on customer answers to the questions provided
 POST http://localhost:8080/BundleProvider/bundle
 
 #### Sample
 Body:
+
+``` 
 {
 	"age" : "18", 
 	"student" : "true",
 	"income" : "12001"
 }
+``` 
 
 Expected result:
+
+``` 
 [
   {
     "containingAccountProduct": true,
@@ -98,13 +108,15 @@ Expected result:
     ]
   }
 ]
-
+``` 
 
 ### Validate bundle if it is applicable based on the bundle data provided
 POST http://localhost:8080/BundleProvider/validation
 
 #### Sample
 Body:
+
+``` 
 {
 	"bundleUid" : "studentBundle",
 	"productUids" : ["studentAccountProduct"],
@@ -114,8 +126,10 @@ Body:
 			"income" : 12001
 			}
 }
+``` 
 
 Expected result:
+``` 
 [
   {
     "validationType": "ProductRule",
@@ -126,9 +140,12 @@ Expected result:
     "validationMsg": "Bundle rule IsStudent validation failed with question age=18 stdent=false income=12001.0 for bundle Student"
   }
 ]
+``` 
 
 
 Body:
+
+``` 
 {
 	"bundleUid" : "goldBundleNonExistant",
 	"productUids" : ["goldCreditCardProduct", "goldCreditCardProduct"],
@@ -138,8 +155,11 @@ Body:
 			"income" : 41000
 			}
 }
+``` 
 
 Expected result:
+
+``` 
 [
   {
     "validationType": "ERR_BUNDLE_NOT_FOUND",
@@ -158,3 +178,4 @@ Expected result:
     "validationMsg": "Could not locate bundle in the repository. Can not process with bundle rules evaluation."
   }
 ]
+``` 
