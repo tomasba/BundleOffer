@@ -5,7 +5,7 @@
 2. run in embedded tomcat: *mvn tomcat7:run*
 
 ## Endpoints
-By default the app url:
+By default the app local url:
 http://localhost:8080/BundleProvider
 
 One of options for executing the REST services available - Postman.
@@ -14,21 +14,66 @@ Add Headers:
 * Accept            application/json
 
 
-### Provide applicable bundles depending on answers to the questions provided
+### Provide best match applicable bundles depending on customer answers to the questions provided
 POST http://localhost:8080/BundleProvider/bundle
 
 #### Sample
 Body:
 {
-			"age" : "19", 
-			"student" : "true",
-			"income" : "1001"
+	"age" : "18", 
+	"student" : "true",
+	"income" : "12001"
 }
 
 Expected result:
 [
   {
-    "displayValue": "Classic",
+    "containingAccountProduct": true,
+    "Priority": 2,
+    "Display value": "Classic Plus",
+    "Products": [
+      "currentAccountProduct",
+      "debitCardProduct",
+      "creditCardProduct"
+    ],
+    "Rules": [
+      "ageMoreThen17",
+      "incomeMoreThen12000"
+    ]
+  }
+]
+
+### Provide best match applicable bundles depending on customer answers to the questions provided
+POST http://localhost:8080/BundleProvider/bundle
+
+#### Sample
+Body:
+{
+	"age" : "18", 
+	"student" : "true",
+	"income" : "12001"
+}
+
+Expected result:
+[
+  {
+    "containingAccountProduct": true,
+    "Priority": 2,
+    "Display value": "Classic Plus",
+    "Products": [
+      "currentAccountProduct",
+      "debitCardProduct",
+      "creditCardProduct"
+    ],
+    "Rules": [
+      "ageMoreThen17",
+      "incomeMoreThen12000"
+    ]
+  },
+  {
+    "containingAccountProduct": true,
+    "Priority": 1,
+    "Display value": "Classic",
     "Products": [
       "currentAccountProduct",
       "debitCardProduct"
@@ -36,6 +81,20 @@ Expected result:
     "Rules": [
       "ageMoreThen17",
       "incomeMoreThen0"
+    ]
+  },
+  {
+    "containingAccountProduct": true,
+    "Priority": 0,
+    "Display value": "Student",
+    "Products": [
+      "studentAccountProduct",
+      "debitCardProduct",
+      "creditCardProduct"
+    ],
+    "Rules": [
+      "ageMoreThen17",
+      "isStudent"
     ]
   }
 ]
@@ -47,36 +106,55 @@ POST http://localhost:8080/BundleProvider/validation
 #### Sample
 Body:
 {
-	"bundleName" : "juniorSaverCustom",
-	"productNames" : ["juniorSaverAccountProduct"],
+	"bundleUid" : "studentBundle",
+	"productUids" : ["studentAccountProduct"],
 	"question" : {
-			"age" : "19", 
+			"age" : "18", 
 			"student" : "false",
-			"income" : 200
+			"income" : 12001
 			}
 }
 
 Expected result:
-{
-  "ERR_BUNDLE_NOT_FOUND": "juniorSaverCustom"
-}
+[
+  {
+    "validationType": "ProductRule",
+    "validationMsg": "Rule id = isStudent has failed for product "
+  },
+  {
+    "validationType": "BundleRule",
+    "validationMsg": "Bundle rule IsStudent validation failed with question age=18 stdent=false income=12001.0 for bundle Student"
+  }
+]
 
 
 Body:
 {
-	"bundleName" : "goldBundle",
-	"productNames" : ["goldCreditCardProduct", "goldCreditCardProduct"],
+	"bundleUid" : "goldBundleNonExistant",
+	"productUids" : ["goldCreditCardProduct", "goldCreditCardProduct"],
 	"question" : {
 			"age" : "19", 
 			"student" : "false",
-			"income" : 200
+			"income" : 41000
 			}
 }
 
 Expected result:
-{
-  "ERR_RULE_VIOLATED": "goldCreditCardProduct, goldCreditCardProduct"
-}
-
-
-Available bundles, products and rules are located in conf. file business-config.xml
+[
+  {
+    "validationType": "ERR_BUNDLE_NOT_FOUND",
+    "validationMsg": "Bundle with uid = goldBundleNonExistant does not exist in repository."
+  },
+  {
+    "validationType": "ERR_PRODUCT_NOT_SUPPORTED_BY_BUNDLE",
+    "validationMsg": "Bundle with uid = goldBundleNonExistant does not exist and can not include product goldCreditCardProduct"
+  },
+  {
+    "validationType": "ERR_PRODUCT_NOT_SUPPORTED_BY_BUNDLE",
+    "validationMsg": "Bundle with uid = goldBundleNonExistant does not exist and can not include product goldCreditCardProduct"
+  },
+  {
+    "validationType": "ERR_BUNDLE_NOT_FOUND",
+    "validationMsg": "Could not locate bundle in the repository. Can not process with bundle rules evaluation."
+  }
+]
